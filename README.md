@@ -1,5 +1,7 @@
+# vue-popover
+
 Simple popover vue component
-# popover
+=======
 
 ## Project setup
 ```
