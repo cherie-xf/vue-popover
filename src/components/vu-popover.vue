@@ -1,25 +1,63 @@
 <template>
-  <div class="vu-popover" v-if="isShow">
-    <div class="popover-container">{{content}}</div>
-  </div>
+  <transition name="fade">
+    <div class="vu-popover" @mouseenter="show" @mouseleave="hide" v-if="isShow" :style="styleObject">
+      <div class="popover-container">{{content}}</div>
+    </div>
+  </transition>
 </template>
 
 <script>
+/**
+ * popover component
+ * =================================
+ * parent element with class .vu-popover-target for calculating position (required)
+ * props:
+ * 1) trigger: controll slider show or hide (required)
+ * 2) content: popover content (optional)
+ * 3) title:  content of popover title (optional)
+ */
 export default {
   name: "vu-popover",
-  props: ["content", "trigger"],
-  // data:function(){
-  //   return {
-  //     showPopover: false,
-  //   }
-  // },
+  props: ["content", 'target', 'trigger'],
+  data: function() {
+    return {
+      styleObject: {
+        color: "red"
+      }
+    };
+  },
   computed: {
     isShow: function(){
-      console.log('tigger changed', this.trigger)
       return this.trigger;
     }
   },
   methods: {
+    show() {
+      this.isShow = true;
+    },
+    hide() {
+      // this.isShow = false;
+    }
+  },
+  updated: function() {
+    // var targetContainer = this.$el.parents(".vu-popover-container");
+  },
+  watch: {
+    isShow: function() {
+      var targetElm = this.target;
+      // var targetElm = this.$el.parentElement;
+        if (targetElm) {
+          var viewportOffset = targetElm.getBoundingClientRect();
+          // these are relative to the viewport, i.e. the window
+          // var top = viewportOffset.top;
+          // var left = viewportOffset.left;
+          var right = viewportOffset.right;
+          var bottom = viewportOffset.bottom;
+          this.styleObject.left = right + "px";
+          this.styleObject.top = bottom + "px";
+          this.styleObject.color = "green";
+        }
+    }
   }
 };
 </script>
@@ -28,9 +66,6 @@ export default {
 <style scoped>
 .vu-popover {
   position: absolute;
-  right: 0;
-  bottom: 0;
-
 }
 .popover-container {
   background: #fff;
@@ -38,5 +73,11 @@ export default {
   padding: 5px;
   border-radius: 5px;
   z-index: 998;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

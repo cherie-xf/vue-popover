@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <span class="popover-target" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
-      <vu-popover content="Welcome to Your Vue.js App" :trigger="showPopover"/>hover this to popover
-    </span>
+    <div class="vu-popover-container">
+      <span @mouseenter="mouseEnter($event)">test 1
+        <vu-popover content="Welcome to Your Vue.js App" :trigger="showPopover" :target="popoverTarget"/>
+      </span>
+    </div>
   </div>
 </template>
 
@@ -17,16 +19,18 @@ export default {
   },
   data: function() {
     return {
-      showPopover: false
+      showPopover: false,
+      popoverTarget: null,
     };
   },
   methods: {
-    mouseEnter: function() {
-      console.log('mouse enter');
-      this.showPopover = true;
+    mouseEnter: function(e) {
+      this.popoverTarget =  e.target;
+      this.showPopover = !this.showPopover;
     },
     mouseLeave: function() {
-      this.showPopover = false;
+      // this.popoverTarget = null;
+      // this.showPopover = false;
     }
   }
 };
@@ -46,6 +50,10 @@ export default {
   border: 1px solid #cccccc;
   background-color: bisque;
   border-radius: 5px;
-  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
