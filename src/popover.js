@@ -1,4 +1,4 @@
-import Popover from 'components/vu-popover.vue'
+import Popover from './components/vu-popover.vue'
 import Vue from 'vue'
 const INSTANCENAME = 'popover_instance';
 Vue.directive('popover', {
@@ -8,7 +8,6 @@ Vue.directive('popover', {
     update: (el, binding, vnode) => {
         if (binding.value !== binding.oldValue) {
             addComponent(el, binding, vnode);
-
         }
 
     },
@@ -25,7 +24,7 @@ Vue.directive('popover', {
 
 function addComponent(el, binding, vnode) {
     var vuPopover = Vue.extend(Popover);
-    if(binding.value && binding.value.trigger === undefined){
+    if (binding.value && binding.value.trigger === undefined) {
         binding.value.trigger = false;
     }
     var popoverInstance = new vuPopover({
@@ -37,31 +36,29 @@ function addComponent(el, binding, vnode) {
         }
     });
     el[INSTANCENAME] = popoverInstance;
-    var s = JSON.stringify
-    el.innerHTML =
-        'name: ' + s(binding.name) + '<br>' +
-        'value: ' + s(binding.value) + '<br>' +
-        'expression: ' + s(binding.expression) + '<br>' +
-        'argument: ' + s(binding.arg) + '<br>' +
-        'modifiers: ' + s(binding.modifiers) + '<br>' +
-        'vnode keys: ' + Object.keys(vnode).join(', ');
+    var dom = vnode.context.$refs.container
+    popoverInstance.$props.content = dom.innerHTML;
+    // const node = popoverInstance.$createElement('div', ['Hello']);
+    // popoverInstance.$slots.default = [node];
+
     popoverInstance.$mount();
+    el.appendChild(popoverInstance.$el);
     addEvents(el, binding);
+
 }
 
-function addEvents(el, binding){
-    el.addEventListener('mouseenter', function() {
-        // el.style.border = "1px solid black";
-        // el.style.color = binding.value.color;
-        // el.style.backgroundColor = binding.value.backgroundColor;
-        binding.value.trigger = true;
+function addEvents(el) {
+    el.addEventListener('mouseenter', function () {
+        el[INSTANCENAME].$props.trigger = true;
+        el.classList.add("popover-show");
     });
-    el.addEventListener('mouseleave', function() {
-        binding.value.trigger = false;
+    el.addEventListener('mouseleave', function () {
+        el[INSTANCENAME].$props.trigger = false;
+        el.classList.remove("popover-show");
     });
 }
 
-function removeEvents(el){
-    el.removeEventListener('mouseenter');
-    el.removeEventListener('mouseleave');
+function removeEvents(el) {
+    el.removeEventListener('mouseenter', null);
+    el.removeEventListener('mouseleave', null);
 }

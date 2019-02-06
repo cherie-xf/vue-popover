@@ -1,7 +1,10 @@
 <template>
   <transition name="fade">
-    <div class="vu-popover" @mouseenter="show" @mouseleave="hide" v-if="isShow" :style="styleObject">
-      <div class="popover-container">{{content}}</div>
+    <div class="vu-popover" v-if="isShow" :style="styleObject">
+      <div class="popover-container" v-html="content">
+        <slot></slot>
+        <div ref="container" class="popover-content"></div>
+      </div>
     </div>
   </transition>
 </template>
@@ -18,7 +21,7 @@
  */
 export default {
   name: "vu-popover",
-  props: ["content", 'target', 'trigger'],
+  props: ["content", "target", "trigger"],
   data: function() {
     return {
       styleObject: {
@@ -27,36 +30,24 @@ export default {
     };
   },
   computed: {
-    isShow: function(){
-      return this.trigger;
+    isShow: function() {
+      return this.trigger || false;
     }
-  },
-  methods: {
-    show() {
-      this.isShow = true;
-    },
-    hide() {
-      // this.isShow = false;
-    }
-  },
-  updated: function() {
-    // var targetContainer = this.$el.parents(".vu-popover-container");
   },
   watch: {
     isShow: function() {
       var targetElm = this.target;
-      // var targetElm = this.$el.parentElement;
-        if (targetElm) {
-          var viewportOffset = targetElm.getBoundingClientRect();
-          // these are relative to the viewport, i.e. the window
-          // var top = viewportOffset.top;
-          // var left = viewportOffset.left;
-          var right = viewportOffset.right;
-          var bottom = viewportOffset.bottom;
-          this.styleObject.left = right + "px";
-          this.styleObject.top = bottom + "px";
-          this.styleObject.color = "green";
-        }
+      if (targetElm) {
+        var viewportOffset = targetElm.getBoundingClientRect();
+        // these are relative to the viewport, i.e. the window
+        // var top = viewportOffset.top;
+        // var left = viewportOffset.left;
+        var right = viewportOffset.right;
+        var bottom = viewportOffset.bottom;
+        this.styleObject.left = right + "px";
+        this.styleObject.top = bottom + "px";
+        this.styleObject.color = "green";
+      }
     }
   }
 };
@@ -74,8 +65,9 @@ export default {
   border-radius: 5px;
   z-index: 998;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;

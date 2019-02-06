@@ -2,37 +2,33 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <div class="vu-popover-container">
-      <span @mouseenter="mouseEnter($event)">test 1
-        <vu-popover content="Welcome to Your Vue.js App" :trigger="showPopover" :target="popoverTarget"/>
+      <span v-popover="{ title: 'white', content: 'Happy Chinese New Year!' }">
+        <button>this is test(hover to see)</button>
+        <div ref="container" class="popover-content">
+          <span>this is the hover content {{message}}</span>
+          <vu-test color="purple"></vu-test>
+        </div>
       </span>
     </div>
   </div>
 </template>
 
 <script>
-import vuPopover from "./components/vu-popover.vue";
+// eslint-disable-next-line
+import vPopover from "./popover.js";
+import vuTest from "./components/vu-test.vue";
 
 export default {
   name: "app",
   components: {
-    vuPopover
+    vuTest
   },
   data: function() {
     return {
-      showPopover: false,
-      popoverTarget: null,
+      message: new Date()
     };
   },
-  methods: {
-    mouseEnter: function(e) {
-      this.popoverTarget =  e.target;
-      this.showPopover = !this.showPopover;
-    },
-    mouseLeave: function() {
-      // this.popoverTarget = null;
-      // this.showPopover = false;
-    }
-  }
+  methods: {}
 };
 </script>
 
@@ -55,5 +51,15 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.popover-show {
+  /* text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: #2c3e50; */
+  border-bottom: 1px dashed black;
+}
+.popover-content {
+  display: none;
+  color: red;
 }
 </style>
