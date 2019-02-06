@@ -2,10 +2,10 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <div class="vu-popover-container">
-      <span v-popover="{ title: 'white', content: 'Happy Chinese New Year!' }">
-        <button>this is test(hover to see)</button>
-        <div ref="container" class="popover-content">
-          <span>this is the hover content {{message}}</span>
+      <span v-popover="{ title: 'Happy Chinese New Year!' }">
+        <button>I have popover(hover to see)</button>
+        <div data-name="popover-content">
+          <span>this is the popover content {{message}}</span>
           <vu-test color="purple"></vu-test>
         </div>
       </span>
@@ -58,8 +58,5 @@ export default {
   text-decoration-color: #2c3e50; */
   border-bottom: 1px dashed black;
 }
-.popover-content {
-  display: none;
-  color: red;
-}
+
 </style>

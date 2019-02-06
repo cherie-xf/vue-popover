@@ -1,9 +1,9 @@
 <template>
   <transition name="fade">
     <div class="vu-popover" v-if="isShow" :style="styleObject">
-      <div class="popover-container" v-html="content">
+      <div class="popover-container">
+        <div class="popover-title" v-if="title" v-html="title"></div>
         <slot></slot>
-        <div ref="container" class="popover-content"></div>
       </div>
     </div>
   </transition>
@@ -16,17 +16,18 @@
  * parent element with class .vu-popover-target for calculating position (required)
  * props:
  * 1) trigger: controll slider show or hide (required)
- * 2) content: popover content (optional)
- * 3) title:  content of popover title (optional)
+ * 2) title:  content of popover title (optional)
+ * 
  */
 export default {
   name: "vu-popover",
-  props: ["content", "target", "trigger"],
+  props: ["title", "target", "trigger"],
   data: function() {
     return {
       styleObject: {
         color: "red"
-      }
+      },
+      timeoutId: 0,
     };
   },
   computed: {
@@ -71,5 +72,8 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.popover-title {
+  color: red;
 }
 </style>
