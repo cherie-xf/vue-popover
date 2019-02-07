@@ -7,7 +7,7 @@
 import Popover from './components/vu-popover.vue'
 import Vue from 'vue'
 const INSTANCENAME = 'popover_instance';
-const HIDETIMEOUT = 500;
+const HIDETIMEOUT = 300;
 Vue.directive('popover', {
     bind: function (el, binding, vnode) {
         addComponent(el, binding, vnode);
@@ -30,7 +30,9 @@ Vue.directive('popover', {
 
 function addComponent(el, binding, vnode) {
     var popoverContentElm = el.querySelectorAll('[data-name="popover-content"]')[0];
-    popoverContentElm.style.display = "none";
+    if (popoverContentElm) {
+        popoverContentElm.style.display = "none";
+    }
     var vuPopover = Vue.extend(Popover);
     if (binding.value && binding.value.trigger === undefined) {
         binding.value.trigger = false;
@@ -40,11 +42,12 @@ function addComponent(el, binding, vnode) {
             target: el,
             title: binding.value && binding.value.title && binding.value.title.toString(),
             trigger: binding.value && binding.value.trigger,
+            appendTo: binding.value && binding.value.appendTo,
         }
     });
     el[INSTANCENAME] = popoverInstance;
-    const node = vnode.children[1];
-    popoverInstance.$slots.default = [node];
+    const contentNode = vnode.children.find(child=>child.data && child.data.attrs && child.data.attrs['data-name'] === "popover-content")
+    popoverInstance.$slots.default = [contentNode];
     popoverInstance.$mount();
     el.appendChild(popoverInstance.$el);
     addEvents(el, binding);
