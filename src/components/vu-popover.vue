@@ -1,6 +1,6 @@
 <template>
   <!-- <transition name="fade"> -->
-  <div class="vu-popover" v-if="isShow" :style="styleObject" ref="vu-popover">
+  <div class="vu-popover" v-if="isShow" :style="styleObject" ref="vupopover">
     <div class="popover-container">
       <div class="popover-title" v-if="title" v-html="title"></div>
       <slot></slot>
@@ -28,7 +28,8 @@ export default {
         color: "red"
       },
       timeoutId: 0,
-      position: ["bottom", "right"]
+      position: ["bottom", "right"],
+      popoverSize: {}
     };
   },
   methods: {
@@ -40,6 +41,7 @@ export default {
     },
     setPosition() {
       // container
+      this.styleObject = {};
       var container = null;
       if (this.appendTo) {
         container = this.getClosest(this.target, "." + this.appendTo);
@@ -57,23 +59,31 @@ export default {
         var targetRect = targetElm.getBoundingClientRect();
 
         // popover
-        var popoverSize = {};
-        popoverSize.width = this.$el.offsetWidth || 0;
-        popoverSize.height = this.$el.offsetHeight || 0;
-        console.log('popover size', popoverSize.width, popoverSize.height)
+        this.popoverSize = {};
+        this.popoverSize.width = this.$el.offsetWidth || 0;
+        this.popoverSize.height = this.$el.offsetHeight || 0;
 
         // calculation
-        if (targetRect.bottom + popoverSize.height < containerRect.bottom) {
+        if (
+          targetRect.bottom + this.popoverSize.height <
+          containerRect.bottom
+        ) {
           this.position[0] = "bottom";
-        } else if (targetRect.top - popoverSize.height > containerRect.top) {
+        } else if (
+          targetRect.top - this.popoverSize.height >
+          containerRect.top
+        ) {
           this.position[0] = "top";
         } else {
           this.position[0] = "center";
         }
 
-        if (targetRect.right + popoverSize.width < containerRect.right) {
+        if (targetRect.right + this.popoverSize.width < containerRect.right) {
           this.position[1] = "right";
-        } else if (targetRect.left - popoverSize.width > containerRect.left) {
+        } else if (
+          targetRect.left - this.popoverSize.width >
+          containerRect.left
+        ) {
           this.position[1] = "left";
         } else {
           this.position[1] = "center";
@@ -82,19 +92,18 @@ export default {
         if (this.position[0] === "center" && this.position[1] === "center") {
           this.position[0] = "bottom"; // better have vertical scroller
         }
-        console.log("postion", this.position[0], this.position[1])
         switch (this.position[0]) {
           case "bottom":
             this.styleObject.top = targetRect.bottom;
             break;
           case "top":
-            this.styleObject.bottom = targetRect.top;
+            this.styleObject.top = targetRect.top - this.popoverSize.height;
             break;
           case "center":
             this.styleObject.top =
               targetRect.bottom -
               parseInt(targetRect.height / 2) -
-              parseInt(popoverSize.height / 2);
+              parseInt(this.popoverSize.height / 2);
             break;
           default:
             // default as bottom
@@ -105,24 +114,61 @@ export default {
             this.styleObject.left = targetRect.right;
             break;
           case "left":
-            this.styleObject.right = targetRect.left;
+            this.styleObject.left = targetRect.left - this.popoverSize.width;
             break;
           case "center":
             this.styleObject.left =
               targetRect.right -
               parseInt(targetRect.width / 2) -
-              parseInt(popoverSize.width / 2);
+              parseInt(this.popoverSize.width / 2);
             break;
           default:
             // default as center
             this.styleObject.left =
               targetRect.right -
               parseInt(targetRect.width / 2) -
-              parseInt(popoverSize.width / 2);
+              parseInt(this.popoverSize.width / 2);
         }
+        Object.keys(this.styleObject).map(key => {
+          this.styleObject[key] = this.styleObject[key] + "px";
+          // console.log("popover offset", key, this.styleObject[key]);
+        });
+        // console.log("postion", this.position[0], this.position[1]);
+        // console.log(
+        //   "popover size",
+        //   "width",
+        //   this.popoverSize.width,
+        //   "height",
+        //   this.popoverSize.height
+        // );
+        // console.log(
+        //   "target offset",
+        //   "top",
+        //   targetRect.top,
+        //   "bottom",
+        //   targetRect.bottom,
+        //   "left",
+        //   targetRect.left,
+        //   "right",
+        //   targetRect.right
+        // );
+        // console.log(
+        //   "container offset",
+        //   "top",
+        //   containerRect.top,
+        //   "bottom",
+        //   containerRect.bottom,
+        //   "left",
+        //   containerRect.left,
+        //   "right",
+        //   containerRect.right
+        // );
         // calculate end
       }
     }
+  },
+  updated() {
+    // console.log("popover updated");
   },
   computed: {
     isShow: function() {
@@ -130,18 +176,19 @@ export default {
     }
   },
   watch: {
-    isShow: function() {
-      // var targetElm = this.target;
-      // if (targetElm) {
-      //   var viewportOffset = targetElm.getBoundingClientRect();
-      //   var top = viewportOffset.top;
-      //   var left = viewportOffset.left;
-      //   var right = viewportOffset.right;
-      //   var bottom = viewportOffset.bottom;
-      //   this.styleObject.left = right + "px";
-      //   this.styleObject.top = bottom + "px";
-      //   this.styleObject.color = "green";
-      // }
+    isShow(nv) {
+      if (nv) {
+        this.$nextTick(() => {
+          this.setPosition();
+        });
+      }
+    },
+    "popoverSize.height"() {
+      this.$nextTick(() => {
+        this.setPosition();
+      });
+    },
+    "popoverSize.width"() {
       this.$nextTick(() => {
         this.setPosition();
       });
@@ -153,7 +200,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .vu-popover {
-  position: absolute;
+  position: fixed;
 }
 .popover-container {
   background: #fff;

@@ -24,7 +24,7 @@
                 <span v-html="cell"></span>
                 <div data-name="popover-content">
                   <span>this is the popover content</span>
-                  <div> {{message}}</div>
+                  <div>{{message}}</div>
                   <vu-test color="purple"></vu-test>
                 </div>
               </span>
@@ -100,7 +100,7 @@ export default {
   text-decoration-color: #2c3e50;
   /* border-bottom: 1px dashed black; */
 }
-.table-container{
+.table-container {
   /* height: 150px; */
   overflow: auto;
 }
