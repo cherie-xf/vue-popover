@@ -171,7 +171,8 @@ function toggleContextMenu(e) {
 
 function hideContextMenu(e) {
     var el = this;
-    if (e && e.target && e.target.classList.contains("popover-container")) {
+    var popoverContainer = el.getElementsByClassName("popover-container")[0]
+    if (e && e.target && popoverContainer.contains(e.target)) {
         return;
     }
     hide.bind(el)(e)
