@@ -2,8 +2,8 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <div class="vu-popover-container">
-      <span v-popover="{ title: 'Happy Chinese New Year!' }">
-        <button>I have popover(hover to see)</button>
+      <span v-popover="{ title: 'Happy Chinese New Year!', trigger:'click' }">
+        <button>I have popover(click to see)</button>
         <div data-name="popover-content">
           <span>this is the popover content {{message}}</span>
           <vu-test color="purple"></vu-test>
@@ -101,7 +101,7 @@ export default {
   /* border-bottom: 1px dashed black; */
 }
 .table-container {
-  /* height: 150px; */
+  height: 150px;
   overflow: auto;
 }
 table {

@@ -14,14 +14,16 @@
  * popover component
  * =================================
  * props:
- * 1) trigger: controll slider show or hide (required)
+ * 1) isOpen: controll slider show or hide (required)
  * 2) title:  content of popover title (optional)
  * 3) appendTo: append to container className(optional for calculate position)
+ * =================================
+ * popover component will handle position automatically, default right bottom ref to target
  *
  */
 export default {
   name: "vu-popover",
-  props: ["title", "target", "trigger", "appendTo"],
+  props: ["title", "target", "isOpen", "appendTo", "trigger"],
   data: function() {
     return {
       styleObject: {
@@ -172,7 +174,7 @@ export default {
   },
   computed: {
     isShow: function() {
-      return this.trigger || false;
+      return this.isOpen || false;
     }
   },
   watch: {
