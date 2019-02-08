@@ -2,7 +2,7 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <div class="vu-popover-container">
-      <span v-popover="{ title: 'Happy Chinese New Year!', trigger:'click', theme:'black' }">
+      <span v-popover="{ title: 'Happy Chinese New Year!', trigger:'contextmenu', theme:'black' }">
         <button>I have popover(click to see)</button>
         <div data-name="popover-content">
           <span>this is the popover content {{message}}</span>

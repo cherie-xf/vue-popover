@@ -2,7 +2,7 @@
  * v-popover directive
  * - this directive will create vu-popover component Instance programmatically
  * - looking for [data-name="popover-content"] to set the vu-popover component Slot (!important)
- * - events trigger binded (by now, only support 'hover', 'click', 'focus', default is 'hover') 
+ * - events trigger binded (by now, only support 'hover', 'click', 'focus','contextmenu', default is 'hover') 
  * - theme (white, blue, green, red, yellow, black)
  */
 import Popover from './components/vu-popover.vue'
@@ -15,6 +15,7 @@ const EVENTS = {
     FOCUS: 'focus',
     BLUR: 'blur',
     CLICK: 'click',
+    CONTEXTMENU: 'contextmenu',
     // INPUT: 'input',
     // KEY_DOWN: 'keydown',
     // KEY_UP: 'keyup',
@@ -31,6 +32,7 @@ const TRIGGERS = {
     FOCUS: 'focus',
     // HOVER_FOCUS: 'hover-focus',
     OUTSIDE_CLICK: 'outside-click',
+    CONTEXTMENU: 'contextmenu',
     // MANUAL: 'manual'
 }
 
@@ -105,6 +107,9 @@ function addEvents(el, binding) {
         el.addEventListener(EVENTS.BLUR, hide.bind(el), true)
     } else if (trigger === TRIGGERS.CLICK || trigger === TRIGGERS.OUTSIDE_CLICK) {
         el.addEventListener(EVENTS.CLICK, toggle.bind(el), true)
+    } else if (trigger === TRIGGERS.CONTEXTMENU) {
+        el.addEventListener(EVENTS.CONTEXTMENU, toggleContextMenu.bind(el), true)
+        document.addEventListener(EVENTS.CLICK, hideContextMenu.bind(el), true)
     }
 }
 
@@ -115,6 +120,8 @@ function removeEvents(el) {
     el.removeEventListener(EVENTS.BLUR, hide);
     el.removeEventListener(EVENTS.CLICK, show);
     el.removeEventListener(EVENTS.CLICK, hide);
+    el.removeEventListener(EVENTS.CONTEXTMENU, toggleContextMenu)
+    document.removeEventListener(EVENTS.CLICK, hideContextMenu)
 }
 
 function show(e) {
@@ -146,4 +153,26 @@ function toggle(e) {
     } else {
         show.bind(el)(e)
     }
+}
+
+function toggleContextMenu(e) {
+    var el = this;
+    if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+    var isShown = el[INSTANCENAME].$props.isOpen;
+    if (isShown) {
+        hide.bind(el)(e)
+    } else {
+        show.bind(el)(e)
+    }
+}
+
+function hideContextMenu(e) {
+    var el = this;
+    if (e && e.target && e.target.classList.contains("popover-container")) {
+        return;
+    }
+    hide.bind(el)(e)
 }
