@@ -3,6 +3,7 @@
  * - this directive will create vu-popover component Instance programmatically
  * - looking for [data-name="popover-content"] to set the vu-popover component Slot (!important)
  * - events trigger binded (by now, only support 'hover', 'click', 'focus', default is 'hover') 
+ * - theme (white, blue, green, red, yellow, black)
  */
 import Popover from './components/vu-popover.vue'
 import Vue from 'vue'
@@ -31,6 +32,15 @@ const TRIGGERS = {
     // HOVER_FOCUS: 'hover-focus',
     OUTSIDE_CLICK: 'outside-click',
     // MANUAL: 'manual'
+}
+
+const THEME = {
+    WHITE: 'white',
+    BLUE: 'blue',
+    GREEN: 'green',
+    RED: 'red',
+    YELLOW: 'yellow',
+    BLACK: 'black',
 }
 
 Vue.directive('popover', {
@@ -65,13 +75,16 @@ function addComponent(el, binding, vnode) {
     if (!binding.value || binding.value.trigger === undefined || Object.values(TRIGGERS).indexOf(binding.value.trigger) < 0) {
         binding.value.trigger = TRIGGERS.HOVER;
     }
+    if (!binding.value || binding.value.theme === undefined || Object.values(THEME).indexOf(binding.value.theme) < 0) {
+        binding.value.theme = THEME.WHITE;
+    }
     var popoverInstance = new vuPopover({
         propsData: {
             target: el,
             title: binding.value && binding.value.title && binding.value.title.toString(),
             isOpen: binding.value && binding.value.isOpen,
             appendTo: binding.value && binding.value.appendTo,
-
+            theme: binding.value && binding.value.theme,
         }
     });
     el[INSTANCENAME] = popoverInstance;

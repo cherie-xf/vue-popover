@@ -2,7 +2,7 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <div class="vu-popover-container">
-      <span v-popover="{ title: 'Happy Chinese New Year!', trigger:'click' }">
+      <span v-popover="{ title: 'Happy Chinese New Year!', trigger:'click', theme:'black' }">
         <button>I have popover(click to see)</button>
         <div data-name="popover-content">
           <span>this is the popover content {{message}}</span>
@@ -20,7 +20,7 @@
         <tbody>
           <tr v-for="(row, id) in data" :key="id">
             <td v-for="(cell, i) in row" :key="i">
-              <span v-popover="{title: 'table cell tooltip', appendTo: 'table-container'}">
+              <span v-popover="{title: 'table cell tooltip', appendTo: 'table-container', theme: cell}">
                 <span v-html="cell"></span>
                 <div data-name="popover-content">
                   <span>this is the popover content</span>
@@ -49,7 +49,8 @@ export default {
   data: function() {
     return {
       message: new Date(),
-      index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+      index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      colors:['white','blue','green','yellow','red','black','blue','green','yellow','black']
     };
   },
   computed: {
@@ -63,7 +64,7 @@ export default {
     data() {
       return this.index.map(idx => {
         let row = this.index.map(i => {
-          return "cell" + i;
+          return this.colors[i];
         });
         row.unshift(idx);
         return row;
@@ -101,7 +102,7 @@ export default {
   /* border-bottom: 1px dashed black; */
 }
 .table-container {
-  height: 150px;
+  /* height: 150px; */
   overflow: auto;
 }
 table {

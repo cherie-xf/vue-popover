@@ -1,6 +1,6 @@
 <template>
   <!-- <transition name="fade"> -->
-  <div class="vu-popover" v-if="isShow" :style="styleObject" ref="vupopover">
+  <div class="vu-popover" v-if="isShow" :style="styleObject" :class="theme" ref="vupopover">
     <div class="popover-container">
       <div class="popover-title" v-if="title" v-html="title"></div>
       <slot></slot>
@@ -17,18 +17,19 @@
  * 1) isOpen: controll slider show or hide (required)
  * 2) title:  content of popover title (optional)
  * 3) appendTo: append to container className(optional for calculate position)
+ * 4) trigger: trigger event name (by now, only support 'hover', 'click', 'focus', default is 'hover')
+ * 5) theme: (white, blue, green, red, yellow, black)
  * =================================
  * popover component will handle position automatically, default right bottom ref to target
  *
  */
+const MARGIN = 5;
 export default {
   name: "vu-popover",
-  props: ["title", "target", "isOpen", "appendTo", "trigger"],
+  props: ["title", "target", "isOpen", "appendTo", "trigger", "theme"],
   data: function() {
     return {
-      styleObject: {
-        color: "red"
-      },
+      styleObject: {},
       timeoutId: 0,
       position: ["bottom", "right"],
       popoverSize: {}
@@ -96,10 +97,10 @@ export default {
         }
         switch (this.position[0]) {
           case "bottom":
-            this.styleObject.top = targetRect.bottom;
+            this.styleObject.top = targetRect.bottom + MARGIN;
             break;
           case "top":
-            this.styleObject.top = targetRect.top - this.popoverSize.height;
+            this.styleObject.top = targetRect.top - this.popoverSize.height - MARGIN;
             break;
           case "center":
             this.styleObject.top =
@@ -109,14 +110,14 @@ export default {
             break;
           default:
             // default as bottom
-            this.styleObject.top = targetRect.bottom;
+            this.styleObject.top = targetRect.bottom + MARGIN;
         }
         switch (this.position[1]) {
           case "right":
-            this.styleObject.left = targetRect.right;
+            this.styleObject.left = targetRect.right + MARGIN;
             break;
           case "left":
-            this.styleObject.left = targetRect.left - this.popoverSize.width;
+            this.styleObject.left = targetRect.left - this.popoverSize.width - MARGIN;
             break;
           case "center":
             this.styleObject.left =
@@ -206,9 +207,9 @@ export default {
 }
 .popover-container {
   background: #fff;
-  box-shadow: 0px 4px 20px 0px rgba(52, 73, 94, 0.2);
-  padding: 5px;
-  border-radius: 5px;
+  /* box-shadow: 0px 4px 20px 0px rgba(52, 73, 94, 0.2); */
+  padding: 8px;
+  border-radius: 8px;
   z-index: 998;
 }
 .fade-enter-active,
@@ -219,6 +220,44 @@ export default {
   opacity: 0;
 }
 .popover-title {
-  color: red;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.white .popover-container {
+  background-color: white;
+  border: 1px solid #dddddd;
+  color: #555555;
+}
+
+.yellow .popover-container {
+  background-color: #f9f2ba;
+  border: 1px solid #e9d315;
+  color: #5b5316;
+}
+
+.blue .popover-container {
+  background-color: #d9f1fb;
+  border: 1px solid #7fcdee;
+  color: #1b475a;
+}
+
+.green .popover-container {
+  background-color: #f2fdf1;
+  border: 1px solid #b6e184;
+  color: #558221;
+}
+
+.red .popover-container {
+  background-color: #bb3b1d;
+  border: 1px solid #8f2a0f;
+  color: #fcfcfc;
+  text-shadow: none;
+}
+
+.black .popover-container {
+  background-color: #333;
+  border: 1px solid #111;
+  color: #fcfcfc;
+  text-shadow: none;
 }
 </style>
