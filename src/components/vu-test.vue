@@ -1,6 +1,6 @@
 <template>
   <div :style="styleObject">
-    <button @click="onClick">click me!</button>
+    <button @click="onClick()">click me!</button>
     <p>{{count}}</p>
   </div>
 </template>

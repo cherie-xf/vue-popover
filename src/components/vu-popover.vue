@@ -23,7 +23,7 @@
  * popover component will handle position automatically, default right bottom ref to target
  *
  */
-const MARGIN = 5;
+const MARGIN = 2;
 export default {
   name: "vu-popover",
   props: ["title", "target", "isOpen", "appendTo", "trigger", "theme"],
