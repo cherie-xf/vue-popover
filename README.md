@@ -2,8 +2,12 @@
 
 Simple popover vue component
 =======
+### demo
+```
+https://cherie-xf.github.io/vue-popover/
+```
 
-## Project setup
+### Project setup
 ```
 npm install
 ```
