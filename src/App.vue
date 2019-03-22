@@ -3,7 +3,7 @@
     <img alt="Vue logo" src="./assets/logo.png">
     <div class="vu-popover-container">
       <span v-popover="{ title: 'Happy Chinese New Year!', trigger:'contextmenu', theme:'black' }">
-        <button>I have popover(click to see)</button>
+        <button>I have popover(right click to see)</button>
         <div data-name="popover-content">
           <span>this is the popover content {{message}}</span>
           <vu-test color="purple"></vu-test>

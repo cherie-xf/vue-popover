@@ -2,13 +2,13 @@
  * v-popover directive
  * - this directive will create vu-popover component Instance programmatically
  * - looking for [data-name="popover-content"] to set the vu-popover component Slot (!important)
- * - events trigger binded (by now, only support 'hover', 'click', 'focus','contextmenu', default is 'hover') 
+ * - events trigger binded (by now, only support 'hover', 'click', 'focus','contextmenu', default is 'hover')
  * - theme (white, blue, green, red, yellow, black)
  */
 import Popover from './components/vu-popover.vue'
 import Vue from 'vue'
 const INSTANCENAME = 'popover_instance';
-const HIDETIMEOUT = 200;
+const HIDETIMEOUT = 500;
 const EVENTS = {
     MOUSE_ENTER: 'mouseenter',
     MOUSE_LEAVE: 'mouseleave',
@@ -108,7 +108,7 @@ function addEvents(el, binding) {
     } else if (trigger === TRIGGERS.CLICK || trigger === TRIGGERS.OUTSIDE_CLICK) {
         el.addEventListener(EVENTS.CLICK, toggle.bind(el), true)
     } else if (trigger === TRIGGERS.CONTEXTMENU) {
-        el.addEventListener(EVENTS.CONTEXTMENU, toggleContextMenu.bind(el), true)
+        document.addEventListener(EVENTS.CONTEXTMENU, toggleContextMenu.bind(el), true)
         document.addEventListener(EVENTS.CLICK, hideContextMenu.bind(el), true)
     }
 }
@@ -120,7 +120,7 @@ function removeEvents(el) {
     el.removeEventListener(EVENTS.BLUR, hide);
     el.removeEventListener(EVENTS.CLICK, show);
     el.removeEventListener(EVENTS.CLICK, hide);
-    el.removeEventListener(EVENTS.CONTEXTMENU, toggleContextMenu)
+    document.removeEventListener(EVENTS.CONTEXTMENU, toggleContextMenu)
     document.removeEventListener(EVENTS.CLICK, hideContextMenu)
 }
 
@@ -135,13 +135,16 @@ function show(e) {
         el.classList.add("popover-show");
     }
 }
-function hide(e) {
+
+function hide() {
     var el = this;
-    e && e.stopPropagation();
+    //e && e.stopPropagation(); // for popover content event listen
     el[INSTANCENAME].$data.timeoutId = setTimeout(() => {
-        el["popover_instance"].$data.timeoutId = 0
+      if(el[INSTANCENAME].$data.timeoutId){
         el[INSTANCENAME].$props.isOpen = false;
         el.classList.remove("popover-show");
+        el[INSTANCENAME].$data.timeoutId = 0
+      }
     }, HIDETIMEOUT)
 }
 
@@ -161,18 +164,18 @@ function toggleContextMenu(e) {
         e.stopPropagation();
         e.preventDefault();
     }
-    var isShown = el[INSTANCENAME].$props.isOpen;
-    if (isShown) {
-        hide.bind(el)(e)
+    if (el.contains(e.target)) {
+      show.bind(el)(e)
     } else {
-        show.bind(el)(e)
+      hide.bind(el)(e)
     }
 }
 
 function hideContextMenu(e) {
+//    e && e.stopPropagation(); // for popover content event listen
     var el = this;
     var popoverContainer = el.getElementsByClassName("popover-container")[0]
-    if (e && e.target && popoverContainer.contains(e.target)) {
+    if (e && e.target && popoverContainer && popoverContainer.contains(e.target)) {
         return;
     }
     hide.bind(el)(e)
