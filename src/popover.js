@@ -16,24 +16,14 @@ const EVENTS = {
     BLUR: 'blur',
     CLICK: 'click',
     CONTEXTMENU: 'contextmenu',
-    // INPUT: 'input',
-    // KEY_DOWN: 'keydown',
-    // KEY_UP: 'keyup',
-    // KEY_PRESS: 'keypress',
-    // RESIZE: 'resize',
-    // SCROLL: 'scroll',
-    // TOUCH_START: 'touchstart',
-    // TOUCH_END: 'touchend'
 }
 
 const TRIGGERS = {
     CLICK: 'click',
     HOVER: 'hover',
     FOCUS: 'focus',
-    // HOVER_FOCUS: 'hover-focus',
     OUTSIDE_CLICK: 'outside-click',
     CONTEXTMENU: 'contextmenu',
-    // MANUAL: 'manual'
 }
 
 const THEME = {
@@ -138,14 +128,15 @@ function show(e) {
 
 function hide() {
     var el = this;
-    //e && e.stopPropagation(); // for popover content event listen
-    el[INSTANCENAME].$data.timeoutId = setTimeout(() => {
-      if(el[INSTANCENAME].$data.timeoutId){
-        el[INSTANCENAME].$props.isOpen = false;
-        el.classList.remove("popover-show");
-        el[INSTANCENAME].$data.timeoutId = 0
-      }
-    }, HIDETIMEOUT)
+    if(el[INSTANCENAME]){
+        el[INSTANCENAME].$data.timeoutId = setTimeout(() => {
+        if(el[INSTANCENAME].$data.timeoutId){
+            el[INSTANCENAME].$props.isOpen = false;
+            el.classList.remove("popover-show");
+            el[INSTANCENAME].$data.timeoutId = 0
+        }
+        }, HIDETIMEOUT)
+    }
 }
 
 function toggle(e) {
@@ -172,7 +163,6 @@ function toggleContextMenu(e) {
 }
 
 function hideContextMenu(e) {
-//    e && e.stopPropagation(); // for popover content event listen
     var el = this;
     var popoverContainer = el.getElementsByClassName("popover-container")[0]
     if (e && e.target && popoverContainer && popoverContainer.contains(e.target)) {

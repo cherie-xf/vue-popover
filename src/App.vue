@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <h1 class="page-title"> vue popover demo</h1>
     <div class="vu-popover-container">
-      <span v-popover="{ title: 'Happy Chinese New Year!', trigger:'contextmenu', theme:'black' }">
-        <button>I have popover(right click to see)</button>
+      <span v-popover="{ title: 'Nice try!', trigger:'contextmenu', theme:'black' }">
+        <b>I have popover(right click to see)</b>
         <div data-name="popover-content">
           <span>this is the popover content {{message}}</span>
           <vu-test color="purple"></vu-test>
@@ -20,12 +20,17 @@
         <tbody>
           <tr v-for="(row, id) in data" :key="id">
             <td v-for="(cell, i) in row" :key="i">
-              <span v-popover="{title: 'table cell tooltip', appendTo: 'table-container', theme: cell}">
+              <span v-popover="{title: 'tooltip title', appendTo: 'table-container', theme: cell}">
                 <span v-html="cell"></span>
                 <div data-name="popover-content">
-                  <span>this is the popover content</span>
-                  <div>{{message}}</div>
-                  <vu-test color="purple"></vu-test>
+                  <div>
+                    <span>add your content here: </span>
+                    <span>{{message}}</span>
+                  </div>
+                  <div>
+                    <span>this is children components: </span>
+                    <vu-test color="pink"></vu-test>
+                  </div>
                 </div>
               </span>
             </td>
@@ -48,9 +53,10 @@ export default {
   },
   data: function() {
     return {
-      message: new Date(),
-      index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-      colors:['white','blue','green','yellow','red','black','blue','green','yellow','black']
+      message: new Date().toISOString().split('T')[0],
+      index: [0, 1, 2, 3, 4, 5],
+      //colors:['white','blue','green','yellow','red','black','blue','green','yellow','black']
+      colors:['white','blue','green','yellow','red','black']
     };
   },
   computed: {
@@ -84,6 +90,11 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.vu-popover-container{
+  display: inline-block;
+  margin: 15px;
+
+}
 .popover-target {
   padding: 2px 8px;
   border: 1px solid #cccccc;
@@ -99,10 +110,8 @@ export default {
   text-decoration-line: underline;
   text-decoration-style: dashed;
   text-decoration-color: #2c3e50;
-  /* border-bottom: 1px dashed black; */
 }
 .table-container {
-  /* height: 150px; */
   overflow: auto;
 }
 table {
@@ -110,6 +119,6 @@ table {
   border: 1px solid #333;
 }
 tr {
-  height: 25px;
+  height: 45px;
 }
 </style>

@@ -134,44 +134,9 @@ export default {
         }
         Object.keys(this.styleObject).map(key => {
           this.styleObject[key] = this.styleObject[key] + "px";
-          // console.log("popover offset", key, this.styleObject[key]);
         });
-        // console.log("postion", this.position[0], this.position[1]);
-        // console.log(
-        //   "popover size",
-        //   "width",
-        //   this.popoverSize.width,
-        //   "height",
-        //   this.popoverSize.height
-        // );
-        // console.log(
-        //   "target offset",
-        //   "top",
-        //   targetRect.top,
-        //   "bottom",
-        //   targetRect.bottom,
-        //   "left",
-        //   targetRect.left,
-        //   "right",
-        //   targetRect.right
-        // );
-        // console.log(
-        //   "container offset",
-        //   "top",
-        //   containerRect.top,
-        //   "bottom",
-        //   containerRect.bottom,
-        //   "left",
-        //   containerRect.left,
-        //   "right",
-        //   containerRect.right
-        // );
-        // calculate end
       }
     }
-  },
-  updated() {
-    // console.log("popover updated");
   },
   computed: {
     isShow: function() {
