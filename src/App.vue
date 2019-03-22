@@ -21,7 +21,7 @@
           <tr v-for="(row, id) in data" :key="id">
             <td v-for="(cell, i) in row" :key="i">
               <span v-popover="{title: 'tooltip title', appendTo: 'table-container', theme: cell}">
-                <span v-html="cell"></span>
+                <span v-html="cell + '(hover me)'"></span>
                 <div data-name="popover-content">
                   <div>
                     <span>add your content here: </span>
